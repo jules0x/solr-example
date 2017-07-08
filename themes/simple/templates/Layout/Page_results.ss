@@ -1,54 +1,37 @@
-<div id="Content" class="searchResults">
-    <h1>$Title</h1>
+<div class="searchheader">
+    <h1 class="searchheader-title">
+        <% if $Query %>
+            <% if $Results.TotalResults > 0 %>
+                Showing
+            <% else %>
+            <% end_if %><span class="searchheader-title--highlight">$Results.TotalResults</span> results for <span  class="searchheader--highlight">$Query</span>
+        <% else %>
+            Search
+        <% end_if %>
+    </h1>
 
-    <% if $Query %>
-        <p class="searchQuery">You searched for &quot;{$Query}&quot;</p>
-    <% end_if %>
+    <% include SearchForm PageArea='desktop' %>
 
     <% if $Results %>
-    <ul id="SearchResults">
-        <% loop $Results %>
-        <li>
-            <h4>
-                <a href="$Link">
-                    <% if $MenuTitle %>
-                    $MenuTitle
-                    <% else %>
-                    $Title
-                    <% end_if %>
-                </a>
-            </h4>
-            <% if $Content %>
-                <p>$Content.LimitWordCountXML</p>
-            <% end_if %>
-            <a class="readMoreLink" href="$Link" title="Read more about &quot;{$Title}&quot;">Read more about &quot;{$Title}&quot;...</a>
-        </li>
-        <% end_loop %>
-    </ul>
-    <% else %>
-    <p>Sorry, your search query did not return any results.</p>
+        <% if $ShowSuggestion %>
+            <div class="searchheader-correction">
+                <p class=searchheader-correction--suggestion">Showing results found for <span>$Suggestion</span></p>
+                <p class=searchheader-correction--searchterm">No results were found matching <span>$Query</span></p>
+            </div>
+        <% end_if %>
     <% end_if %>
+</div>
 
-    <% if $Results.MoreThanOnePage %>
-    <div id="PageNumbers">
-        <div class="pagination">
-            <% if $Results.NotFirstPage %>
-            <a class="prev" href="$Results.PrevLink" title="View the previous page">&larr;</a>
+<div class="searchresults " data-search-results id="main" role="main">
+    <% if $TotalResults > 0 %>
+        <% include SearchResults Results=$Results %>
+    <% else %>
+        <p class="searchresults-noresult">
+            <% if $Query %>
+                No results
+            <% else %>
+                Please enter a search term
             <% end_if %>
-            <span>
-                <% loop $Results.Pages %>
-                    <% if $CurrentBool %>
-                    $PageNum
-                    <% else %>
-                    <a href="$Link" title="View page number $PageNum" class="go-to-page">$PageNum</a>
-                    <% end_if %>
-                <% end_loop %>
-            </span>
-            <% if $Results.NotLastPage %>
-            <a class="next" href="$Results.NextLink" title="View the next page">&rarr;</a>
-            <% end_if %>
-        </div>
-        <p>Page $Results.CurrentPage of $Results.TotalPages</p>
-    </div>
+        </p>
     <% end_if %>
 </div>

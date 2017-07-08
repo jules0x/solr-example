@@ -1,0 +1,3 @@
+Director:
+  rules:
+    'search': 'Search_Controller'
